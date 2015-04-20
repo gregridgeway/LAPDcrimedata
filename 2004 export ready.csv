@@ -1,4 +1,4 @@
-QUARTER,REPORTING DISTRICT,DIVISION,BURG BUS-,BURG RES-,BURG OTH-,ROBB ST-,ROBB OTH-,MURD- ER,RAPE,AGGR ASSA- ULT,BURG FROM AUTO,THEFT FROM AUTO,GRAND THEFT,THEFT FROM PERS,PURSE SNAT- CH,OTHER THEFT,BIKE THEFT,AUTO THEFT,BUNCO,TOTAL
+quarter,RD,division,burg.bus,burg.res,burg.oth,robb.st,robb.oth,murder,rape,aggr.assault,burg.from.auto,theft.from.auto,grand.theft,theft.from.pers,purse.snatch,other.theft,bike.theft,auto.theft,bunco,total
 2004Q1,0101,1,0,4,0,1,0,0,0,9,8,4,1,0,0,1,0,15,0,43
 2004Q1,0105,1,0,1,1,2,0,0,0,2,8,0,0,0,0,1,0,6,0,21
 2004Q1,0111,1,7,6,4,9,4,0,0,11,20,4,13,3,1,14,0,17,0,113

@@ -9,9 +9,4 @@ foreach(year=1988:2005) %do%
    read.csv(paste(year," export ready.csv",sep=""))
 }
 
-# check any with extra lines
-for(i in 1:length(lapl.data))
-{
-   print((1988:2005)[i])
-   print(lapl.data[[i]][nrow(lapl.data[[i]]),])
-}
+# load data from LAPD incidents
