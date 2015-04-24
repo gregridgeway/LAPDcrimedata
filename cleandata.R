@@ -4,9 +4,12 @@
 setwd("z:/articles/transit and crime/LAPDcrimedata")
 
 
+##############################################################################
 # load data from LAPD incidents
 incd.data <- read.csv("LAPD crime counts from incidents.csv")
 
+##############################################################################
+# load and polish data from LAPL, 1988-2005
 library(doParallel)
 lapl.data <-
 foreach(year=1988:2005) %do%
@@ -87,9 +90,20 @@ xyplot(ROBB.a ~ ROBB.b | quarter, data=d)
 i <- order(-abs(d$ROBB.a-d$ROBB.b))[1:10]
 d[i,]
 
+##############################################################################
+# process data from data.lacity.org, 2013-2014
+data13 <- read.csv("LAPD_Crime_and_Collision_Raw_Data_for_2013.csv.gz",as.is=TRUE)
+
+
+data14 <- read.csv("LAPD_Crime_and_Collision_Raw_Data_-_2014.csv.gz",  as.is=TRUE)
+
+crimetype.xwalk <- read.csv("CrimeClassCode-CrimeTypeXWalk.csv",as.is=TRUE)
 
 ##############################################################################
 # merge datasets, LAPL 1988-2004, LAPD incident counts 2005-2010
 data.final <- 
    rbind(do.call(rbind,lapl.data[1:17]),
          subset(incd.data, !(quarter %in% c("2004Q1","2004Q2","2004Q3","2004Q4"))))
+
+write.csv(data.final,file="LAPD crime counts 1988-2010 merged.csv",
+          row.names=FALSE,quote=FALSE)
