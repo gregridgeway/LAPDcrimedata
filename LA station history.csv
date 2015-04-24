@@ -1,0 +1,86 @@
+Station,StopNum,Line,Location,Date opened
+103rd Street/Watts Towers,80113,blue,Los Angeles (Watts),7/14/1990
+Anaheim Street,80105,blue,Long Beach,7/14/1990
+Artesia,80110,blue,Compton,7/14/1990
+Compton,80111,blue,Compton,7/14/1990
+Del Amo,80109,blue,Rancho Dominguez,7/14/1990
+Firestone,80114,blue,Florence-Graham,7/14/1990
+Florence,80115,blue,Florence-Graham,7/14/1990
+Grand/LATTC,80120,blue,Los Angeles (Historic South Central),7/14/1990
+Pacific Coast Highway,80106,blue,Long Beach,7/14/1990
+Pico,80121,blue,Los Angeles (South Park),7/14/1990
+Pico,80121,expo,Los Angeles (South Park),7/14/1990
+San Pedro,80119,blue,Los Angeles (Historic South Central),7/14/1990
+Slauson,80116,blue,Florence-Graham,7/14/1990
+Vernon,80117,blue,Los Angeles (South Los Angeles),7/14/1990
+Wardlow,80108,blue,Long Beach,7/14/1990
+Washington,80118,blue,Los Angeles (South Los Angeles),7/14/1990
+Willow Street,80107,blue,Long Beach,7/14/1990
+Willowbrook/Rosa Parks,80112,blue,Willowbrook,7/14/1990
+Willowbrook/Rosa Parks,80311,green,Willowbrook,7/14/1990
+1st Street,80153,blue,Long Beach,9/1/1990
+5th Street,80154,blue,Long Beach,9/1/1990
+Downtown Long Beach,80101,blue,Long Beach,9/1/1990
+Pacific Avenue,80102,blue,Long Beach,9/1/1990
+7th Street/Metro,80122,blue,Los Angeles(Financial District),2/15/1991
+7th Street/Metro,80211,rp,Los Angeles(Financial District),2/15/1991
+7th Street/Metro,80122,expo,Los Angeles(Financial District),2/15/1991
+Civic Center/Grand Park,80213,rp,Los Angeles (Civic Center),1/30/1993
+Pershing Square,80212,rp,Los Angeles(Financial District /Jewelry District),1/30/1993
+Union Station,80214,rp,Los Angeles (El Pueblo),1/30/1993
+Union Station,80409,gold,Los Angeles (El Pueblo),1/30/1993
+Westlake/MacArthur Park,80210,rp,Los Angeles (Westlake),1/30/1993
+Avalon,80310,green,Los Angeles (South Los Angeles),8/12/1995
+Aviation/LAX,80305,green,Los Angeles(Westchester),8/12/1995
+Crenshaw,80307,green,Hawthorne,8/12/1995
+Douglas,80302,green,El Segundo,8/12/1995
+El Segundo,80303,green,El Segundo,8/12/1995
+Harbor Freeway,80309,green,Los Angeles (South Los Angeles),8/12/1995
+Hawthorne/Lennox,80306,green,Hawthorne,8/12/1995
+Lakewood Boulevard,80313,green,Downey,8/12/1995
+Long Beach Boulevard,80312,green,Lynwood,8/12/1995
+Mariposa,80304,green,El Segundo,8/12/1995
+Norwalk,80314,green,Norwalk,8/12/1995
+Redondo Beach,80301,green,Redondo Beach,8/12/1995
+Vermont/Athens,80308,green,Los Angeles(Athens / South Los Angeles),8/12/1995
+Wilshire/Normandie,80215,rp,Los Angeles(Koreatown),5/22/1996
+Wilshire/Vermont,80209,rp,Los Angeles (Koreatown),5/22/1996
+Wilshire/Western,80216,rp,Los Angeles(Koreatown),5/22/1996
+Hollywood/Vine,80204,rp,Los Angeles(Hollywood),6/12/1999
+Hollywood/Western,80205,rp,Los Angeles (East Hollywood),6/12/1999
+Vermont/Beverly,80208,rp,Los Angeles(Koreatown),6/12/1999
+Vermont/Santa Monica,80207,rp,Los Angeles (East Hollywood),6/12/1999
+Vermont/Sunset,80206,rp,Los Angeles (East Hollywood),6/12/1999
+Hollywood/Highland,80203,rp,Los Angeles(Hollywood),6/24/2000
+North Hollywood,80201,rp,Los Angeles (North Hollywood),6/24/2000
+Universal City/Studio City,80202,rp,Los Angeles (Studio City),6/24/2000
+Allen,80420,gold,Pasadena,7/27/2003
+Chinatown,80410,gold,Los Angeles(Chinatown),7/27/2003
+Del Mar,80417,gold,Pasadena,7/27/2003
+Fillmore,80416,gold,Pasadena,7/27/2003
+Heritage Square,80412,gold,Los Angeles(Cypress Park),7/27/2003
+Highland Park,80414,gold,Los Angeles(Highland Park),7/27/2003
+Lake,80419,gold,Pasadena,7/27/2003
+Lincoln/Cypress,80411,gold,Los Angeles (Lincoln Heights),7/27/2003
+Memorial Park,80418,gold,Pasadena,7/27/2003
+Sierra Madre Villa,80421,gold,Pasadena,7/27/2003
+South Pasadena,80415,gold,South Pasadena,7/27/2003
+Southwest Museum,80413,gold,Los Angeles(Highland Park /Mount Washington),7/27/2003
+Atlantic,80401,gold,East Los Angeles,11/15/2009
+East LA Civic Center,80402,gold,East Los Angeles,11/15/2009
+Indiana,80404,gold,Los Angeles (East Los Angeles),11/15/2009
+Little Tokyo/Arts District,80408,gold,Los Angeles (Little Tokyo / Arts District),11/15/2009
+Maravilla,80403,gold,East Los Angeles,11/15/2009
+Mariachi Plaza,80406,gold,Los Angeles (Boyle Heights),11/15/2009
+Pico/Aliso,80407,gold,Los Angeles (Boyle Heights),11/15/2009
+Soto,80405,gold,Los Angeles (Boyle Heights),11/15/2009
+Expo/Crenshaw,80128,expo,Los Angeles(Jefferson Park),4/28/2012
+Expo/La Brea,80130,expo,Los Angeles(Baldwin Hills),4/28/2012
+Expo/Vermont,80126,expo,Los Angeles(University Park),4/28/2012
+Expo/Western,80127,expo,Los Angeles(University Park),4/28/2012
+Expo Park/USC,80125,expo,Los Angeles(University Park),4/28/2012
+Jefferson/USC,80124,expo,Los Angeles(University Park),4/28/2012
+La Cienega/Jefferson,80131,expo,Los Angeles(Baldwin Hills),4/28/2012
+LATTC/Ortho Institute,80123,expo,Los Angeles (Historic South Central),4/28/2012
+Culver City,80132,expo,Culver City,6/20/2012
+Farmdale,80129,expo,Los Angeles(Adams),6/20/2012
