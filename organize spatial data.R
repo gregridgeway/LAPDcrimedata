@@ -63,83 +63,119 @@ station.map <- a
 
 station.map$LINE <- tolower(as.character(station.map$LINE))
 station.map$LINE[station.map$LINE=="red/purple"] <- "red"
-station.map$LINE[station.map$LINE=="purple"] <- "red"
+station.map$LINE[station.map$LINE=="purple"]     <- "red"
 station.map$col <- station.map$LINE
-station.map$col[station.map$LINE=="expo"] <- "light blue"
+station.map$col[station.map$LINE=="expo"]        <- "light blue"
 
 # plot the stations
 par(mai=c(0,0,0,0))
 plot(LAPDmap.new,new=FALSE)
 points(station.map,col=station.map$col,pch=16)
 
+##############################################################################
 # read in station history
 station.hx <- read.csv("LA station history.csv",as.is=TRUE)
 station.hx$Date.opened <- mdy(station.hx$Date.opened)
+station.hx$Line[station.hx$Line=="rp"] <- "red"
 
 # check that station numbers link up with shapefiles
-for(x in c("blue","gold","green","red","purple","expo"))
+for(x in c("blue","gold","green","red","expo"))
 {
    print(x)
    i <- match(subset(station.hx,Line==x)$StopNum,
-              station.map[[x]]@data$STOPNUMNEW)
+              subset(station.map,LINE==x)$STOPNUMNEW)
    print(sort(i)-1:length(i))
-   i <- match(station.map[[x]]@data$STOPNUMNEW,
+   i <- match(subset(station.map,LINE==x)$STOPNUMNEW,
               subset(station.hx,Line==x)$StopNum)
    print(sort(i)-1:length(i))
 }
 
+# add opening date to station shapefile
+i <- match(paste(station.map$LINE,station.map$STOPNUMNEW),
+           paste(station.hx$Line, station.hx$StopNum))
+station.map$open.date <- station.hx$Date.opened[i]
+
+##############################################################################
 # match stations to RDs
-station.hx$rd <- NA
-station.join <- over(station.map$blue,LAPDmap.new)
-a <- subset(station.map$blue,!is.na(station.join$number))
+
+# check which stations fall within an RD
+station.join <- over(station.map,LAPDmap.new)
+a <- subset(station.map,!is.na(station.join$number))
 points(a,col="purple",pch=16)
 
-for(x in c("blue","gold","green","rp","expo"))
+# link RDs to earliest nearby station opening
+rd.dist <- data.frame(rd=sort(unique(LAPDmap.new$number)),
+                      StopNum=NA,
+                      Line=NA,
+                      open.date=ymd("2051-06-18"))
+rd.dist$open.date[] <- NA
+max.distance <- 200
+# check RD119
+for(i.rd in 1:nrow(rd.dist))
 {
-   station.join <- over(station.map[[x]],LAPDmap.new)
-   station.join$number <- as.numeric(as.character(station.join$number))
-   i <- match(station.map[[x]]@data$STOPNUMNEW, station.hx$StopNum)
-   i <- i[!is.na(station.join$number)]
-   station.hx$rd[i] <- with(station.join, number[!is.na(station.join$number)])
+   print(rd.dist$rd[i.rd])
+   # compute distance
+   d <- dist2Line(station.map, 
+                  subset(LAPDmap.new,number==rd.dist$rd[i.rd]))
+   # set distance to 0 if station inside the RD
+   #   dist2Line() will compute to boundary which can be large
+   i <- which(station.join$number==rd.dist$rd[i.rd])
+   if(length(i)>0) d[i,"distance"] <- 0
+   # which stations are within max.distance meters of the edge of an RD
+   i <- which(d[,"distance"]<max.distance)
+
+   # show how R is matching RDs to stations
+   if(TRUE & length(i)>0)
+   {
+      par(mai=c(0,0,1,0))
+      # plot the current RDs district
+      plot(subset(LAPDmap.new,floor(number/100) %in% floor(rd.dist$rd[i.rd]/100)),
+           new=FALSE,main=floor(rd.dist$rd[i.rd]/100))
+      # highlight the current RD
+      plot(subset(LAPDmap.new,number == rd.dist$rd[i.rd]),
+           add=TRUE,col="light pink")
+      # overlay the stations
+      points(station.map,col=station.map$col,pch=16)
+      # highlight stations within max.distance meters
+      points(subset(station.map,d[,"distance"]<max.distance),
+             bg=station.map$col[i],col="black",pch=21,cex=2)
+      #Sys.sleep(10)
+   }
+
+   # get the station that opened first
+   if(length(i)>0)
+   {
+      j <- which.min(station.map$open.date[i])
+      rd.dist$open.date[i.rd] <- station.map$open.date[i[j]]
+      rd.dist$StopNum[i.rd]   <- station.map$STOPNUMNEW[i[j]]
+      rd.dist$Line[i.rd]      <- station.map$LINE[i[j]]
+   }
 }
 
-# check that RDs are correctly linked to stations
+# add line and open date to LAPDmap
+i <- match(LAPDmap.new$number,rd.dist$rd)
+LAPDmap.new$Line      <- rd.dist$Line[i]
+LAPDmap.new$open.date <- rd.dist$open.date[i]
+
+# show map, check stations map
+col.map <- c(blue="blue",expo="light blue",gold="gold",green="green",red="red")
 par(mai=c(0,0,0,0))
 plot(LAPDmap.new,new=FALSE)
-col.map <- c(blue="blue",gold="gold",green="green",rp="red",expo="light blue")
-for(x in c("blue","gold","green","rp","expo"))
-{
-   a <- with(station.hx, rd[Line==x & !is.na(rd)])
-   plot(subset(LAPDmap.new,number %in% a),col=col.map[x],add=TRUE)
-   points(station.map[[x]],col="black",bg=col.map[x],pch=21)
-}
+plot(subset(LAPDmap.new,!is.na(Line)),
+     add=TRUE,col=col.map[LAPDmap.new$Line[!is.na(LAPDmap.new$Line)]])
+# overlay the stations
+#points(station.map,col=station.map$col,pch=16)
+points(station.map,col="black")
 
-
-
-d <- matrix(NA,nrow=length(unique(LAPDmap.new@data$number)),
-               ncol=nrow(station.map$rp@data))
-rownames(d) <- unique(LAPDmap.new@data$number)
-for(i in 1:nrow(d))
-{
-   a <- dist2Line(station.map$rp, 
-                  subset(LAPDmap.new,number==rownames(d)[i]))
-   d[i,] <- a[,"distance"]
-}
-# examine RDs close to stations
+# zoom in
 par(mai=c(0,0,0,0))
-plot(subset(LAPDmap.new,floor(number/100) %in% c(1,2,6,11,15,20)),new=FALSE)
-#for(x in c("blue","gold","green","rp","expo"))
-for(x in c("rp"))
-{
-   a <- names(d)[d<200]
-   plot(subset(LAPDmap.new,number %in% a),col=col.map[x],add=TRUE)
-   points(station.map[[x]],col="black",bg=col.map[x],pch=21)
-}
+a <- with(rd.dist, unique(floor(rd[!is.na(Line)]/100)))
+plot(subset(LAPDmap.new,floor(number/100) %in% a),new=FALSE)
+plot(subset(LAPDmap.new,!is.na(Line)),
+     col=col.map[LAPDmap.new$Line[!is.na(LAPDmap.new$Line)]],
+     add=TRUE)
+# overlay the stations
+#points(station.map,col=station.map$col,pch=16)
+points(station.map,col="black")
 
-plot(subset(LAPDmap.new,floor(number/100)==6),col="salmon",add=TRUE)
-
-
-library(ggplot2)
-ggplot(LAPDmap.new, aes(x = long, y = lat)) + 
-   geom_path(aes(group = group))
-   
+save(station.map,LAPDmap.new,rd.dist,RDxwalk,file="maps.Rdata")
