@@ -1,5 +1,6 @@
 setwd("z:/articles/transit and crime/LAPDcrimedata")
 library(rgdal)
+library(maptools)
 library(lubridate)
 library(geosphere)
 
@@ -29,6 +30,10 @@ a <- with(RDxwalk, NEW.RD[NEW.RD!=OLD.RD])
 a <- a[!is.na(a)]
 plot(LAPDmap.new)
 plot(subset(LAPDmap.new,number %in% a),col="red",add=TRUE)
+
+# set features to numeric
+LAPDmap.new$number  <- as.numeric(as.character(LAPDmap.new$number))
+LAPDmap.old$REPDIST <- as.numeric(as.character(LAPDmap.old$REPDIST))
 
 # read in rail stations
 station.map <- list()
