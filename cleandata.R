@@ -1,11 +1,13 @@
 # read in LAPD crime data OCRd from the LA public library (1988-2005)
 # read in LAPD incident data (2004-2010)
-# merge the two to make a 1988-2010 dataset
+# read in LAPD incident data (2011-2014)
+#    2011,2012 - came from LAPD Office of CIO
+#    2013,2014 - published at data.lacity.org
+# merge the three to make a 1988-2014 dataset
 setwd("z:/articles/transit and crime/LAPDcrimedata")
 library(doParallel)
 library(lubridate)
 library(lattice)
-
 
 ##############################################################################
 # load data from LAPD incidents
@@ -144,12 +146,12 @@ foreach(i.quarter=unique(data.11.14$quarter)) %do%
    return(a)      
 }
 data.11.14 <- do.call(rbind,results)
+data.11.14$rd <- as.integer(data.11.14$rd)
 # just use the crime types shared with earlier years (i.e. drop rape)
-data1314 <- subset(data1314, select=names(lapl.data[[1]]))
-data1314$rd <- as.numeric(data1314$rd)
+data.11.14 <- subset(data.11.14, select=names(lapl.data[[1]]))
 
 ##############################################################################
-# merge datasets, LAPL 1988-2004, LAPD incident counts 2005-2010
+# merge datasets, LAPL 1988-2004, LAPD incident counts 2005-2014
 data.final <- 
    rbind(do.call(rbind,lapl.data[1:17]),
          subset(incd.data, !(quarter %in% c("2004Q1","2004Q2","2004Q3","2004Q4"))),
@@ -158,18 +160,62 @@ data.final <-
 data.final$year <- as.numeric(substring(data.final$quarter,1,4))
 data.final$Q    <- as.numeric(substring(data.final$quarter,6,6))
 
-with(data.final, table(year,floor(rd/100)))
-
 # check for groups of missing RDs
+with(data.final, table(year,Q,floor(rd/100)))
+
+##############################################################################
+# search for births and deaths of RDs
+a <- sort(unique(data.final$rd))
+pdf("plots.pdf")
+for(i in a[floor(a/100)==1])
+{
+   plot(AGG~quarter,data=subset(data.final,rd==i),
+        main=i,axes=FALSE)
+   axis(1,at=seq(1,108,by=4),1988:2014,las=2,lwd.ticks=3)
+   axis(1,at=1:108,labels=rep(" ",108))
+}
+dev.off()
+
+#library(readstata13)
+#grog <- read.dta13("../LAPDdata/lapd_from grogger.dta")
+#unique(grog[,c("rd95","rd96","rd97","rd99","rpdst")])
+
 
 ##############################################################################
 # convert all old RD numbers into new RD numbers
-rd.xwalk <- read.csv("lapd2009old2new rd xwalk.csv")
-data.final$rd.new <- data.final$rd
-i <- which(as.numeric(substring(data.final$quarter,1,4))<=2008)
-j <- match(data.final$rd[i], rd.xwalk$OLD.RD)
-# RDs that are not in the crosswalk
-a <- table(data.final$rd[i][is.na(j)])
+data.final$rd14 <- data.final$rd
+#  1994->1995 change
+rd.xwalk <- read.csv("LAPD1994xwalk.csv",as.is=TRUE)
+i <- data.final$year<=1994
+j <- match(data.final$rd14[i],rd.xwalk$RD94)
+data.final$rd14[i][!is.na(j)] <- rd.xwalk$RD95[j[!is.na(j)]]
+#  check
+subset(data.final, year<=1996 & rd==695)
+
+#  1995->1996 change
+rd.xwalk <- read.csv("LAPD1995xwalk.csv",as.is=TRUE)
+i <- data.final$year<=1995
+j <- match(data.final$rd14[i],rd.xwalk$RD95)
+data.final$rd14[i][!is.na(j)] <- rd.xwalk$RD96[j[!is.na(j)]]
+#  check
+subset(data.final, year<=1998 & rd==501)
+
+#  1996->1997 change
+rd.xwalk <- read.csv("LAPD1996xwalk.csv",as.is=TRUE)
+i <- data.final$year<=1996
+j <- match(data.final$rd14[i],rd.xwalk$RD96)
+data.final$rd14[i][!is.na(j)] <- rd.xwalk$RD97[j[!is.na(j)]]
+#  check
+subset(data.final, year<=1999 & rd==971)
+
+#  2008->2009 change
+rd.xwalk <- read.csv("LAPD2008xwalk.csv",as.is=TRUE)[,c("RD08","RD09")]
+rd.xwalk <- subset(rd.xwalk, RD08!=RD09)
+i <- data.final$year<=2008
+j <- match(data.final$rd14[i],rd.xwalk$RD08)
+data.final$rd14[i][!is.na(j)] <- rd.xwalk$RD09[j[!is.na(j)]]
+#  check
+subset(data.final, year<=2010 & rd==211)
 
 write.csv(data.final,file="LAPD crime counts 1988-2014 merged.csv",
           row.names=FALSE,quote=FALSE)
