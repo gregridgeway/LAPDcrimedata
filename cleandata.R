@@ -18,6 +18,7 @@ incd.data <- read.csv("LAPD crime counts from incidents.csv")
 lapl.data <-
 foreach(year=1988:2005) %do%
 {
+   print(year)
    a <- read.csv(paste(year," export ready.csv",sep=""))
 
    a$AGG <- a$aggr.assault 
@@ -175,47 +176,6 @@ for(i in a[floor(a/100)==1])
    axis(1,at=1:108,labels=rep(" ",108))
 }
 dev.off()
-
-#library(readstata13)
-#grog <- read.dta13("../LAPDdata/lapd_from grogger.dta")
-#unique(grog[,c("rd95","rd96","rd97","rd99","rpdst")])
-
-
-##############################################################################
-# convert all old RD numbers into new RD numbers
-data.final$rd14 <- data.final$rd
-#  1994->1995 change
-rd.xwalk <- read.csv("LAPD1994xwalk.csv",as.is=TRUE)
-i <- data.final$year<=1994
-j <- match(data.final$rd14[i],rd.xwalk$RD94)
-data.final$rd14[i][!is.na(j)] <- rd.xwalk$RD95[j[!is.na(j)]]
-#  check
-subset(data.final, year<=1996 & rd==695)
-
-#  1995->1996 change
-rd.xwalk <- read.csv("LAPD1995xwalk.csv",as.is=TRUE)
-i <- data.final$year<=1995
-j <- match(data.final$rd14[i],rd.xwalk$RD95)
-data.final$rd14[i][!is.na(j)] <- rd.xwalk$RD96[j[!is.na(j)]]
-#  check
-subset(data.final, year<=1998 & rd==501)
-
-#  1996->1997 change
-rd.xwalk <- read.csv("LAPD1996xwalk.csv",as.is=TRUE)
-i <- data.final$year<=1996
-j <- match(data.final$rd14[i],rd.xwalk$RD96)
-data.final$rd14[i][!is.na(j)] <- rd.xwalk$RD97[j[!is.na(j)]]
-#  check
-subset(data.final, year<=1999 & rd==971)
-
-#  2008->2009 change
-rd.xwalk <- read.csv("LAPD2008xwalk.csv",as.is=TRUE)[,c("RD08","RD09")]
-rd.xwalk <- subset(rd.xwalk, RD08!=RD09)
-i <- data.final$year<=2008
-j <- match(data.final$rd14[i],rd.xwalk$RD08)
-data.final$rd14[i][!is.na(j)] <- rd.xwalk$RD09[j[!is.na(j)]]
-#  check
-subset(data.final, year<=2010 & rd==211)
 
 write.csv(data.final,file="LAPD crime counts 1988-2014 merged.csv",
           row.names=FALSE,quote=FALSE)
