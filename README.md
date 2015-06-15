@@ -3,7 +3,11 @@ The aim of this repository is to catalog data on crimes reported to the Los Ange
 
 Data from 1988-2005 were collected by a team that scanned hundreds of pages from the Los Angeles Public Library archive, ran OCR on them, and verified the OCR by checking row and column sums.
 
-Data for 2005 at the library archive were problematic. For 2005-2010 we tabulated crime counts by RD using incident level data we had from LAPD. Data from 2013-2014 were tabulated from data posted to data.lacity.org.
+Data for 2005 at the library archive were problematic. For 2005-2010 we tabulated crime counts by RD using incident level data we had from LAPD. Data from 2011-2012 were tabulated from incident data we requested from LAPD. Data from 2013-2014 were tabulated from data posted to data.lacity.org.
+
+Images of the scanned originals are available [here](https://drive.google.com/folderview?id=0B2CD6T-u0yNWSFYzaXdBeWxEUDA).
+
+LAPD regularly redraws the reporting district boundaries and renumbers reporting districts even when boundaries do not change. We also scanned old LAPD map books to create crosswalks for each year. Images of the scanned original maps are available [here](https://drive.google.com/folderview?id=0B2CD6T-u0yNWdTNHMXh0LUpSVlU).
 
 # Credits
 - Thanks to Mike Humphreys at LAPD for supplying the 2011-2012 data
