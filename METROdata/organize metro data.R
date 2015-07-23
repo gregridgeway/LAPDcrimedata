@@ -1,13 +1,13 @@
-setwd("z:/articles/transit and crime/METROdata")
+setwd("z:/articles/transit and crime/LAPDcrimedata/METROdata")
 library(rgdal)
 library(maptools)
 library(lubridate)
 library(geosphere)
 
 # organize spatial data
-LAPDmap09 <- readOGR("../LAPDcrimedata/lapd reporting district.shp","lapd reporting district")
+LAPDmap09 <- readOGR("../lapd reporting district.shp","lapd reporting district")
 LAPDmap09$number <- as.numeric(as.character(LAPDmap09$number))
-LAPDmap05 <- readOGR("../LAPDcrimedata/lapdrd_05.shp","lapdrd_05")
+LAPDmap05 <- readOGR("../lapdrd_05.shp","lapdrd_05")
 proj4string(LAPDmap05) <- CRS("+proj=lcc +lat_1=35.46666666666667 +lat_2=34.03333333333333 +lat_0=33.5 +lon_0=-118 +x_0=2000000.0001016 +y_0=500000.0001016001 +ellps=GRS80 +datum=NAD83 +to_meter=0.3048006096012192 +no_defs")
 LAPDmap05 <- spTransform(LAPDmap05, LAPDmap09@proj4string)
 LAPDmap05$REPDIST <- as.numeric(as.character(LAPDmap05$REPDIST))
@@ -24,11 +24,11 @@ station.map$gold  <- readOGR("GoldLineSta0412.shp", "GoldLineSta0412")
 station.map$green <- readOGR("GreenLineSta0412.shp","GreenLineSta0412")
 station.map$rp    <- readOGR("RPLinesSta0412.shp",  "RPLinesSta0412")
 station.map$expo  <- readOGR("ExpoLineSta0512.shp", "ExpoLineSta0512")
-station.map$blue  <- spTransform(station.map$blue,  LAPDmap.new@proj4string)
-station.map$gold  <- spTransform(station.map$gold,  LAPDmap.new@proj4string)
-station.map$green <- spTransform(station.map$green, LAPDmap.new@proj4string)
-station.map$rp    <- spTransform(station.map$rp,    LAPDmap.new@proj4string)
-station.map$expo  <- spTransform(station.map$expo,  LAPDmap.new@proj4string)
+station.map$blue  <- spTransform(station.map$blue,  LAPDmap05@proj4string)
+station.map$gold  <- spTransform(station.map$gold,  LAPDmap05@proj4string)
+station.map$green <- spTransform(station.map$green, LAPDmap05@proj4string)
+station.map$rp    <- spTransform(station.map$rp,    LAPDmap05@proj4string)
+station.map$expo  <- spTransform(station.map$expo,  LAPDmap05@proj4string)
 
 # merge stations into one point shape file
 #   standardize feature names
@@ -54,7 +54,6 @@ station.map$LINE[station.map$LINE=="purple"]     <- "red"
 station.map$col <- station.map$LINE
 station.map$col[station.map$LINE=="expo"]        <- "light blue"
 
-station.map <- spTransform(station.map, LAPDmap05@proj4string)
 
 # plot the stations
 par(mai=c(0,0,0,0))
@@ -167,7 +166,7 @@ plot(subset(LAPDmap05,!is.na(Line)),
 points(station.map,col=station.map$col,pch=16)
 points(station.map,col="black")
 
-write.csv(rd.dist,file="RD station xwalk.csv",
+write.csv(rd.dist,file="../RD station xwalk.csv",
           row.names=FALSE,quote=FALSE)
 
 save(station.map,LAPDmap05,rd.dist,file="maps.Rdata")
