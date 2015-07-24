@@ -24,3 +24,10 @@ crime.data$Q.open <- NA
 i <- !is.na(crime.data$station.date)
 crime.data$Q.open[i] <- with(crime.data[i,], 
    (year+Q/4-1/8)-decimal_date(station.date))
+   
+# add strike flag
+#   strike September 16-October 18, 2000
+#   strike October 14-November 18, 2003
+
+write.csv(crime.data,file="data.csv",
+          row.names=FALSE,quote=FALSE)
