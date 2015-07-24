@@ -4,6 +4,7 @@
 #    2011,2012 - came from LAPD Office of CIO
 #    2013,2014 - published at data.lacity.org
 # merge the three to make a 1988-2014 dataset
+#   About 9 hours using three 2.5 GHz processors
 setwd("z:/articles/transit and crime/LAPDcrimedata")
 library(doParallel)
 library(lubridate)
