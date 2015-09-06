@@ -92,58 +92,73 @@ a <- subset(station.map,!is.na(station.join$REPDIST))
 points(a,col="purple",pch=16)
 
 # link RDs to earliest nearby station opening
-rd.dist <- data.frame(rd=sort(unique(LAPDmap05$REPDIST)),
-                      StopNum=NA,
-                      Line=NA,
-                      open.date=ymd("2051-06-18"))
+rd.dist <- expand.grid(rd=sort(unique(LAPDmap05$REPDIST)),
+                       Q=1:4,
+                       year=1988:2014,
+                       dist=NA,
+                       StopNum=NA,
+                       Line=NA,
+                       open.date=ymd("2051-06-18")) # put in a date to set type
 rd.dist$open.date[] <- NA
-max.distance <- 200
+
 # check RD119
-for(i.rd in 1:nrow(rd.dist))
+# use the middle of the Q as point to include/exclude station opening
+Q.dates <- c("-02-15","-05-15","-08-15","-11-15")
+# start with 1990 Q3
+i.1990Q3 <- min(which(rd.dist$year==1990 & rd.dist$Q==3))
+for(i.rd in i.1990Q3:nrow(rd.dist))
 {
-   print(rd.dist$rd[i.rd])
+   start.date <- paste0(rd.dist$year[i.rd],Q.dates[rd.dist$Q[i.rd]])
+   # if we're starting on a new quarter then update the map and the join
+   if((rd.dist$year[i.rd]!=rd.dist$year[i.rd-1]) &
+      (rd.dist$Q[i.rd]   !=rd.dist$Q[i.rd-1]))
+   {
+      map.current  <- subset(station.map,open.date<=start.date)
+      station.join <- over(map.current,LAPDmap05)
+   }
+   
    # compute distance
-   d <- dist2Line(station.map, 
+   d <- dist2Line(map.current,
                   subset(LAPDmap05,REPDIST==rd.dist$rd[i.rd]))
    # set distance to 0 if station inside the RD
    #   dist2Line() will compute to boundary which can be large
    i <- which(station.join$REPDIST==rd.dist$rd[i.rd])
    if(length(i)>0) d[i,"distance"] <- 0
-   # which stations are within max.distance meters of the edge of an RD
-   i <- which(d[,"distance"]<max.distance)
+   # which station is closest to the edge of the RD
+   i <- which.min(d[,"distance"])
 
    # show how R is matching RDs to stations
-   if(TRUE & length(i)>0)
+   if(FALSE & length(i)>0)
    {
       par(mai=c(0,0,1,0))
       # plot the current RDs district
       plot(subset(LAPDmap05,floor(REPDIST/100) %in% floor(rd.dist$rd[i.rd]/100)),
            new=FALSE,main=floor(rd.dist$rd[i.rd]/100))
+#      plot(LAPDmap05,new=FALSE,main=floor(rd.dist$rd[i.rd]/100))
+      
       # highlight the current RD
       plot(subset(LAPDmap05,REPDIST == rd.dist$rd[i.rd]),
            add=TRUE,col="light pink")
       # overlay the stations
-      points(station.map,col=station.map$col,pch=16)
+      points(map.current,col=map.current$col,pch=16)
       # highlight stations within max.distance meters
-      points(subset(station.map,d[,"distance"]<max.distance),
-             bg=station.map$col[i],col="black",pch=21,cex=2)
+      points(map.current[i,],
+             bg=map.current$col[i],col="black",pch=21,cex=2)
       #Sys.sleep(10)
    }
 
-   # get the station that opened first
-   if(length(i)>0)
-   {
-      j <- which.min(station.map$open.date[i])
-      rd.dist$open.date[i.rd] <- station.map$open.date[i[j]]
-      rd.dist$StopNum[i.rd]   <- station.map$STOPNUMNEW[i[j]]
-      rd.dist$Line[i.rd]      <- station.map$LINE[i[j]]
-   }
+   rd.dist$dist[i.rd]      <- d[i,"distance"]
+   rd.dist$open.date[i.rd] <- map.current$open.date[i]
+   rd.dist$StopNum[i.rd]   <- map.current$STOPNUMNEW[i]
+   rd.dist$Line[i.rd]      <- map.current$LINE[i]
+
+   print(rd.dist[i.rd,])
 }
 
 # add line and open date to LAPDmap
-i <- match(LAPDmap05$REPDIST,rd.dist$rd)
-LAPDmap05$Line      <- rd.dist$Line[i]
-LAPDmap05$open.date <- rd.dist$open.date[i]
+i <- match(LAPDmap05$REPDIST,rd.dist$rd[rd.dist$year==2014])
+LAPDmap05$Line      <- rd.dist$Line[rd.dist$year==2014][i]
+LAPDmap05$open.date <- rd.dist$open.date[rd.dist$year==2014][i]
 
 # show map, check stations map
 col.map <- c(blue="blue",expo="light blue",gold="gold",green="green",red="red")
