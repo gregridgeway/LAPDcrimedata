@@ -5,7 +5,7 @@ Data from 1988-2005 were collected by a team that scanned hundreds of pages from
 
 Data for 2005 at the library archive were problematic. For 2005-2010 we tabulated crime counts by RD using incident level data we had from LAPD. Data from 2011-2012 were tabulated from incident data we requested from LAPD. Data from 2013-2014 were tabulated from data posted to data.lacity.org.
 
-Images of the scanned originals are available [here](https://drive.google.com/folderview?id=0B2CD6T-u0yNWSFYzaXdBeWxEUDA).
+Images of the scanned originals are available [here](tree/master/LAPLscans).
 
 LAPD regularly redraws the reporting district boundaries and renumbers reporting districts even when boundaries do not change. We also scanned old LAPD map books to create crosswalks for each year. Images of the scanned original maps are available [here](https://drive.google.com/folderview?id=0B2CD6T-u0yNWdTNHMXh0LUpSVlU).
 
