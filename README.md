@@ -7,7 +7,7 @@ Data for 2005 at the library archive were problematic. For 2005-2010 we tabulate
 
 Images of the scanned originals are available [here](LAPLscans/).
 
-LAPD regularly redraws the reporting district boundaries and renumbers reporting districts even when boundaries do not change. We also scanned old LAPD map books to create crosswalks for each year. Images of the scanned original maps are available [here](https://drive.google.com/folderview?id=0B2CD6T-u0yNWdTNHMXh0LUpSVlU).
+LAPD regularly redraws the reporting district boundaries and renumbers reporting districts even when boundaries do not change. We also scanned old LAPD map books to create crosswalks for each year. Images of the scanned original maps are available [here](RDmaps/).
 
 # Credits
 - Thanks to Mike Humphreys at LAPD for supplying the 2011-2012 data
